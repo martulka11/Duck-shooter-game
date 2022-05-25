@@ -27,13 +27,16 @@ public class Duck extends JLabel implements ImageObserver, MouseListener {
 
     public Duck(String pathname, int y, int width, int hight, int speed) {
         super();
+        //this.image = dimg;
         this.pathname = pathname;
         this.speed = speed;
         this.distance =  1 + (int)(Math.random()*speed);
-        this.x = 0;
-        this.y = y;
+       this.x = 0;
+       this.y = y;
+       //this.setLocation(x, y);
         this.width = width;
         this.hight = hight;
+       //this.setSize(width, hight);
         this.lives = duckColor();
         this.addMouseListener(this);
         System.out.println("make duck"+ lives);
@@ -53,11 +56,15 @@ public class Duck extends JLabel implements ImageObserver, MouseListener {
         }
 
     }
+   /* Image dimg = image.getScaledInstance(width, hight,
+            Image.SCALE_SMOOTH);
+*/
+  //  ImageIcon imageIcon = new ImageIcon(dimg);
+
 
     ActionListener al=new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
             x += distance;
-          //  System.out.println("odleglosc" + x);
             if(x > 1200)
             x -= distance;
         }
@@ -79,18 +86,32 @@ public class Duck extends JLabel implements ImageObserver, MouseListener {
         }
     }
 
-public int addScore(){
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    public int addScore(){
         return GameScreen.score + this.score;
 }
-
+/*
 
       @Override
    public void paintComponent(Graphics g) {
         super.paintComponent(g);
        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(image, x, y, width, hight, this);
+        g2d.drawImage(image, x, y, width, hight, null);
     }
-
+*/
 
 
     @Override

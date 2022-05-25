@@ -15,30 +15,47 @@ import java.util.List;
 
 public class GameScreen extends JPanel{
 
-    private JButton button1;
     private JLabel labelTime = new JLabel("0");
     private JLabel labelScore = new JLabel("0");
     public static int start = 0;
     public static int score = 0;
-   // public Line2D lin;
 
     public static List<Duck> listOfDuck = new LinkedList<>();
 
 
     public GameScreen(){
 
-        JPanel bottompanel = new JPanel();
-        Duck duck1  = new Duck("/red-duck.png", 200, 70, 70, 40);
-        Duck duck2  = new Duck("/blue-duck.png", 50, 70, 70, 5);
+        Duck duck1  = new Duck("/red-duck.png",  100, 60, 60, 10);
+        Duck duck2  = new Duck("/blue-duck.png",  200, 70, 70, 20);
+        Duck duck3  = new Duck("/green-duck.png",  400, 70, 70, 5);
+        Duck duck4  = new Duck("/yellow-duck.png",  150, 30, 30, 10);
+        Duck duck5  = new Duck("/red-duck.png",  500, 70, 70, 10);
 
-        this.setLayout(new BorderLayout());
+        listOfDuck.add(duck1);
+        listOfDuck.add(duck2);
+        listOfDuck.add(duck3);
+        listOfDuck.add(duck4);
+        listOfDuck.add(duck5);
+
+        // this.setLayout(null);
+
+        JPanel pane = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                for(int i = 0; i < listOfDuck.size(); i++) {
+                    g.drawImage(listOfDuck.get(i).getImage(), listOfDuck.get(i).getX(), listOfDuck.get(i).getY(), null);
+                }
+            }
+        };
+
+        this.add(pane);
+
+       // labelTime.setLocation(450, 800);
+        //this.add(labelTime);
 
 
-        bottompanel.add(labelTime);
-        this.add(bottompanel, BorderLayout.SOUTH);
 
-        this.add(duck1);
-        this.add(duck2);
         new Thread(
                 () -> {
                     while (!Thread.currentThread().isInterrupted()) {
@@ -49,8 +66,8 @@ public class GameScreen extends JPanel{
                 }
         ).start();
 
-        this.setBackground(Color.WHITE);
-         this.setSize(1200, 850);
+       // this.setBackground(Color.WHITE);
+        // this.setSize(1200, 900);
     }
 
 
@@ -93,15 +110,6 @@ public class GameScreen extends JPanel{
         dialog.setSize(300, 200);
         dialog.setVisible(true);
     }
-
-  /*  Duck duck1  = new Duck("/red-duck.png", 100, 70, 70, 7);
-    Duck duck2  = new Duck("/red-duck.png", 100, 70, 70, 7);
-
-    public void paint(Graphics g) {
-        super.paint(g);
-            duck1.paint(g);
-            duck2.paint(g);
-        }
 
 /*
     @Override

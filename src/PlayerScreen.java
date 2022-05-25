@@ -40,21 +40,12 @@ public class PlayerScreen extends JPanel implements ActionListener {
     }
 
 
-    public void createChangePanel(JPanel panel) {
-        MyFrame.contentPane.removeAll();
-        MyFrame.contentPane.add(panel);
-        System.out.println("new panel created");
-        validate();
-        setVisible(true);
-      // panel.setSize(1200, 900);
-    }
-
    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         GameScreen gb = new GameScreen();
         if(source == playButton){
-            createChangePanel(MyFrame.gameScreen);
+            MyFrame.cObjl.next(MyFrame.cPanel);
             gb.startCounter();
             name = textField.getText();
             System.out.println(name);

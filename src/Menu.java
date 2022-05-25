@@ -41,24 +41,15 @@ public class Menu extends JPanel implements ActionListener {
 
     }
 
-
-    public void createChangePanel(JPanel panel) {
-        MyFrame.contentPane.removeAll();
-        MyFrame.contentPane.add(panel);
-        System.out.println("new panel created");
-        validate();
-        setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         MyFrame my = new MyFrame();
         GameScreen gb = new GameScreen();
         if(source == button1){
-            createChangePanel(MyFrame.playerScreen);
+            MyFrame.cObjl.next(MyFrame.cPanel);
         } else if(source == button2){
-            createChangePanel(MyFrame.scoreScreen);
+            MyFrame.cObjl.show(MyFrame.cPanel, "4");
         } else if(source == button3){
             System.exit(0);
         }
