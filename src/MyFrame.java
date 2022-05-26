@@ -1,18 +1,15 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+import java.awt.event.*;
 import java.awt.Container;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 
-
-public class MyFrame extends JFrame implements Runnable {
+public class MyFrame extends JFrame{
 
     private JPanel menuScreen;
     public static JPanel playerScreen;
@@ -26,9 +23,8 @@ public class MyFrame extends JFrame implements Runnable {
     public static JPanel cPanel;
 
     public MyFrame() {
-       super("Game");
+       super("Duck shooter");
         cPanel = new JPanel();
-
         cObjl = new CardLayout();
 
         cPanel.setLayout(cObjl);
@@ -40,7 +36,6 @@ public class MyFrame extends JFrame implements Runnable {
         scoreScreen = new JPanel();
 
 
-
         Menu menu = new Menu();
         menuScreen.add(menu);
        menuScreen.setBackground(Color.PINK);
@@ -48,12 +43,18 @@ public class MyFrame extends JFrame implements Runnable {
 
         PlayerScreen playerS = new PlayerScreen();
         playerScreen.add(playerS);
-        playerScreen.setLayout(null);
 
-        GameScreen game = new GameScreen();
+
+        List<Duck> ducks = new ArrayList<>();
+        List<Duck> ducksMedium = new ArrayList<>();
+        List<Duck> ducksHard = new ArrayList<>();
+        Duck ducks1 = new Duck("/red-duck.png", 100);
+        ducks.add(new Duck("/green-duck.png", 200));
+        ducks.add(ducks1);
+
+        GameScreen game = new GameScreen(ducks);
         gameScreen.add(game);
-        // gameScreen.setBackground(Color.WHITE);
-       // gameScreen.setLayout(new BorderLayout());
+        gameScreen.setBackground(Color.WHITE);
 
         ScoreTable scoreTable = new ScoreTable();
         scoreScreen.add(scoreTable);
@@ -68,25 +69,24 @@ public class MyFrame extends JFrame implements Runnable {
         cPanel.add(gameScreen, "3");
 
         cPanel.add(scoreScreen, "4");
+
         getContentPane().add(cPanel);
 
+
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1200, 900);
+        this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
 
-
-    @Override
-    public void run() {
-
-    }
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+        EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new MyFrame();
+
             }
         });
 

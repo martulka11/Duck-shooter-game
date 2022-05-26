@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -11,65 +8,51 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
-public class Duck extends JLabel implements ImageObserver, MouseListener {
+public class Duck extends JLabel implements ImageObserver {
     private BufferedImage image;
     private String pathname;
     private int distance;
     private int speed;
-    public int x;
+    private int x;
     private int y;
     private int width;
     private int hight;
-    private int lives;
+    public int lives;
     private int score;
 
 
 
-    public Duck(String pathname, int y, int width, int hight, int speed) {
+    public Duck(String pathname, int y) {
         super();
         //this.image = dimg;
         this.pathname = pathname;
-        this.speed = speed;
-        this.distance =  1 + (int)(Math.random()*speed);
-       this.x = 0;
-       this.y = y;
-       //this.setLocation(x, y);
-        this.width = width;
-        this.hight = hight;
-       //this.setSize(width, hight);
+       //this.speed = speed;
+        this.distance =  1 + (int)(Math.random()*5);
+        this.x = 0;
+        this.y = y;
+        //this.width = width;
+        //this.hight = hight;
         this.lives = duckColor();
-        this.addMouseListener(this);
         System.out.println("make duck"+ lives);
         this.score = 0;
-        GameScreen.listOfDuck.add(this);
-        timer.start();
 
 
 
 
-        File imageFile = new File(pathname);
+        String imageFile = pathname;
         try {
-            image = ImageIO.read(imageFile);
+            image = ImageIO.read(getClass().getResource(imageFile));
         } catch (IOException e) {
-            System.err.println("Blad odczytu obrazka");
+            System.err.println("error in upload the picture");
             e.printStackTrace();
         }
 
     }
+
    /* Image dimg = image.getScaledInstance(width, hight,
             Image.SCALE_SMOOTH);
 */
   //  ImageIcon imageIcon = new ImageIcon(dimg);
-
-
-    ActionListener al=new ActionListener() {
-        public void actionPerformed(ActionEvent ae) {
-            x += distance;
-            if(x > 1200)
-            x -= distance;
-        }
-    };
-    Timer timer=new Timer(100,al);
 
     public int duckColor() {
         switch (pathname) {
@@ -86,8 +69,20 @@ public class Duck extends JLabel implements ImageObserver, MouseListener {
         }
     }
 
+    public int getLives() {
+        return lives;
+    }
+
     public BufferedImage getImage() {
         return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public void reduceLives() {
+        this.lives--;
     }
 
     @Override
@@ -100,51 +95,59 @@ public class Duck extends JLabel implements ImageObserver, MouseListener {
         return y;
     }
 
+    public void setLocation(int x, int y) {
+        setX(x);
+        setY(y);
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+    public int getWidth() {
+        return image == null ? 0 : image.getWidth();
+    }
+
+    public int getHeight() {
+        return image == null ? 0 : image.getHeight();
+    }
+
+
     public int addScore(){
         return GameScreen.score + this.score;
 }
-/*
 
-      @Override
-   public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-       Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(image, x, y, width, hight, null);
-    }
-*/
-
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if(lives > 0){
-            lives--;
-            System.out.println(lives);
-            System.out.println("mouseClicked");
-        } else {
-            this.score=1;
-            System.out.println("Score" + score);
-           // System.out.println( "ogolne punkty" + GameScreen.score);
-            image = null;
+    public void move(Rectangle bounds){
+        x+= distance;
+            if(x + getWidth() > bounds.width){
+                Player.livesPlayer--;
+             x = bounds.width - getWidth();
+             distance *=-1;
+         } else if(x < 0){
+                Player.livesPlayer--;
+                x = 0;
+             distance *= -1;
         }
+        setLocation(x, y);
+
     }
 
+
+public void paint(Graphics2D g2d, ImageObserver observer) {
+    g2d.drawImage(getImage(), getX(), getY(), observer);
+}
+
+ActionListener ad = new ActionListener() {
     @Override
-    public void mousePressed(MouseEvent e) {
-
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Cick");
     }
+};
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
 
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 }

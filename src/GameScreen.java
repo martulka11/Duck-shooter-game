@@ -1,16 +1,17 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameScreen extends JPanel{
@@ -19,40 +20,75 @@ public class GameScreen extends JPanel{
     private JLabel labelScore = new JLabel("0");
     public static int start = 0;
     public static int score = 0;
+    public static Timer timer2;
 
-    public static List<Duck> listOfDuck = new LinkedList<>();
+    private List<Duck> ducks;
 
 
-    public GameScreen(){
+    public GameScreen(List<Duck> ducks) {
 
-        Duck duck1  = new Duck("/red-duck.png",  100, 60, 60, 10);
-        Duck duck2  = new Duck("/blue-duck.png",  200, 70, 70, 20);
-        Duck duck3  = new Duck("/green-duck.png",  400, 70, 70, 5);
-        Duck duck4  = new Duck("/yellow-duck.png",  150, 30, 30, 10);
-        Duck duck5  = new Duck("/red-duck.png",  500, 70, 70, 10);
+        this.ducks = ducks;
 
-        listOfDuck.add(duck1);
-        listOfDuck.add(duck2);
-        listOfDuck.add(duck3);
-        listOfDuck.add(duck4);
-        listOfDuck.add(duck5);
+        Random rnd = new Random();
 
-        // this.setLayout(null);
 
-        JPanel pane = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                for(int i = 0; i < listOfDuck.size(); i++) {
-                    g.drawImage(listOfDuck.get(i).getImage(), listOfDuck.get(i).getX(), listOfDuck.get(i).getY(), null);
+        for (Duck duck : ducks) {
+          duck.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Point me = e.getPoint();
+                    // Rectangle bounds = new Rectangle(getSize());
+                    //  if (bounds.contains(me)) {
+                    for(int i = 0; i < ducks.size(); i++){
+                        if(ducks.get(i).getLives()>0){
+                            System.out.println(ducks.get(i).getY());
+                            ducks.get(i).reduceLives();
+                            System.out.println("zostalo zyc" + ducks.get(i).getLives());
+                        } else {
+                            // score++; inaczej??????????????/
+                            //moze liczac kaczki ktore nie maja obrazkow???
+                            ducks.remove(i);
+                        }
+                    }
+                    System.out.println("I was clicked!");
                 }
-            }
+                // }
+            });
+          // System.out.println(getX());
+            //duck.setDelta(xDelta, 0);
         };
 
-        this.add(pane);
 
-       // labelTime.setLocation(450, 800);
-        //this.add(labelTime);
+
+
+        Timer timer = new Timer(1, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Rectangle bounds = new Rectangle(getSize());
+                for (Duck duck : ducks) {
+                    duck.move(bounds);
+                }
+                start++;
+             //   System.out.println(start);
+                repaint();
+            }
+        });
+        timer.start();
+
+
+
+        ActionListener al=new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                    //start++
+                if(Player.livesPlayer == 0){
+                    timer.stop();
+                }
+
+            }
+
+        };
+        timer2 =new Timer(1000,al);
 
 
 
@@ -61,73 +97,79 @@ public class GameScreen extends JPanel{
                     while (!Thread.currentThread().isInterrupted()) {
                         labelTime.setText(String.valueOf(start));
                         labelScore.setText(String.valueOf(score));
-                        repaint();
                     }
                 }
         ).start();
 
-       // this.setBackground(Color.WHITE);
-        // this.setSize(1200, 900);
+        this.setBackground(Color.WHITE);
     }
-
-
-    public void startCounter() {
-        new Thread(
-                () -> {
-                    try {
-                        while (!Thread.currentThread().isInterrupted()) {
-                           start++;
-                            Thread.sleep(1000);
+/*
+        public void startCounter () {
+            new Thread(
+                    () -> {
+                        try {
+                            while (!Thread.currentThread().isInterrupted()) {
+                                start++;
+                                Thread.sleep(1000);
+                                System.out.println(start);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
-                }
-        ).start();
-    }
+            ).start();
 
-
+        }*/
 //jakbym tutaj dodala metode dodajaca kaczki??
 
 
-    public void zapisWynikow(String sciezkapliku) {
-        try {
-            FileWriter fileWriter = new FileWriter(sciezkapliku);
-            fileWriter.write(MyFrame.listOfPlayer.toString());
-            fileWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        public void zapisWynikow (String sciezkapliku){
+            try {
+                FileWriter fileWriter = new FileWriter(sciezkapliku);
+                fileWriter.write(MyFrame.listOfPlayer.toString());
+                fileWriter.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-
-    public void gameOverJDialog(){
-        JDialog dialog = new JDialog(new Frame(), "Info Frame");
-        JLabel lab = new JLabel("Game Over");
-        dialog.add(lab);
-        dialog.setSize(300, 200);
-        dialog.setVisible(true);
-    }
-
-/*
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        for (Duck duck : listOfDuck) {
-            Graphics2D g2d = (Graphics2D) g;
-            duck.paint(g2d);
-            g2d.dispose();
+        @Override
+        public Dimension getPreferredSize () {
+            return new Dimension(1200, 900);
         }
-/*
-    public void paint(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        Line2D lin = new Line2D.Float(100, 100, 250, 260);
-        g2.draw(lin);
+
+        @Override
+        protected void paintComponent (Graphics g){
+            super.paintComponent(g);
+            for (Duck duck : ducks) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                duck.paint(g2d, this);
+                g2d.dispose();
+            }
+        }
+
+        public void gameOverJDialog () {
+            JDialog dialog = new JDialog(new Frame(), "Info Frame");
+            dialog.setLayout(new FlowLayout());
+            JLabel lab = new JLabel("Game Over");
+            JButton button = new JButton("Back to Menu");
+            dialog.add(lab);
+            button.addActionListener(actionListener);
+            dialog.add(button);
+            dialog.setSize(600, 500);
+            dialog.setVisible(true);
+        }
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            MyFrame.cObjl.show(MyFrame.cPanel, "1");
+        }
+    };
+
+
+
     }
-
-*/
-
-}
 

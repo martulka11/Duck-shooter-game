@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class PlayerScreen extends JPanel implements ActionListener {
 
@@ -34,7 +35,6 @@ public class PlayerScreen extends JPanel implements ActionListener {
 
 
         this.setBackground(Color.WHITE);
-        this.setSize(1200, 850);
 
 
     }
@@ -43,10 +43,9 @@ public class PlayerScreen extends JPanel implements ActionListener {
    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        GameScreen gb = new GameScreen();
         if(source == playButton){
             MyFrame.cObjl.next(MyFrame.cPanel);
-            gb.startCounter();
+            GameScreen.timer2.start();
             name = textField.getText();
             System.out.println(name);
 }

@@ -36,7 +36,7 @@ public class Menu extends JPanel implements ActionListener {
        this.add(button3, layout);
 
 
-
+        this.setSize(500, 500);
         this.setBackground(Color.PINK);
 
     }
@@ -44,8 +44,6 @@ public class Menu extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        MyFrame my = new MyFrame();
-        GameScreen gb = new GameScreen();
         if(source == button1){
             MyFrame.cObjl.next(MyFrame.cPanel);
         } else if(source == button2){

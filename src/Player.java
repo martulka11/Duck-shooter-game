@@ -7,7 +7,7 @@ public class Player {
     private int score;
     private String name;
     private int time;
-    private int lives;
+    public static int livesPlayer = 10;
     private int totalScore;
 
 
@@ -15,7 +15,6 @@ public class Player {
         this.name = name;
         this.score = GameScreen.score;
         this.time = GameScreen.start;
-        this.lives = 10;
         this.totalScore = score*time;
         MyFrame.listOfPlayer.add(this);
     }
