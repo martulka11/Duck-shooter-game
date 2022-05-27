@@ -1,4 +1,4 @@
-/*import javax.imageio.ImageIO;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,27 +8,45 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-public class Obstacle extends JPanel {
+public class Obstacle extends JLabel implements ImageObserver {
     private BufferedImage image;
     private String pathname;
     private int distance;
-    //private int speed;
     public int x;
     private int y;
-    private int width;
-    private int hight;
+    private int lives;
 
-    public Obstacle(String pathname, int y, int width, int hight){
+    public Obstacle(String pathname, int y){
+        super();
+        this.pathname = pathname;
+        this.distance =  1 + (int)(Math.random()*2);
+        this.x = 0;
+        this.y = y;
+        this.lives = obstacleLives();
+        System.out.println("make obstacle"+ lives);
+
+
+        String imageFile = pathname;
+        try {
+            image = ImageIO.read(getClass().getResource(imageFile));
+        } catch (IOException e) {
+            System.err.println("Error in upload the picture");
+            e.printStackTrace();
+        }
+
+    }
 
         public BufferedImage getImage() {
             return image;
         }
 
-        public void setImage(BufferedImage image) {
-            this.image = image;
-        }
 
-        @Override
+
+    public int getLives() {
+        return lives;
+    }
+
+    @Override
         public int getX() {
             return x;
         }
@@ -59,53 +77,39 @@ public class Obstacle extends JPanel {
             return image == null ? 0 : image.getHeight();
         }
 
-        public void setDelta(int x, int y) {
-            xDelta = x;
-            yDelta = y;
-        }
 
-        public int getXDelta() {
-            return xDelta;
-        }
-
-        public int getYDelta() {
-            return yDelta;
-        }
-
-
-
-        public int addScore(){
-            return GameScreen.score + this.score;
-        }
-
-        public void move(Rectangle bounds) {
-            int xDelta = getXDelta();
-            int yDelta = getYDelta();
-            int x = getX() + xDelta;
-            int y = getY() + yDelta;
-
-            if (x < bounds.x) {
-                x = bounds.x;
-                xDelta *= -1;
-            } else if (x + getWidth() >= bounds.x + bounds.width) {
-                x = (bounds.x + bounds.width) - getWidth();
-                xDelta *= -1;
+        public void moveObstacle(Rectangle bounds){
+            x+= distance;
+            if(x + getWidth() > bounds.width){
+                x = bounds.width - getWidth();
+                distance *=-1;
+            } else if(x < 0){
+                x = 0;
+                distance *= -1;
             }
-
-            if (y < bounds.y) {
-                y = bounds.y;
-                yDelta *= -1;
-            } else if (y + getWidth() >= bounds.y + bounds.height) {
-                y = (bounds.y + bounds.height) - getHeight();
-                yDelta *= -1;
-            }
-            setDelta(xDelta, yDelta);
             setLocation(x, y);
+
         }
+
+    public void reduceLives() {
+        this.lives--;
+    }
+
+
+    public int obstacleLives() {
+        switch (pathname) {
+            case "/tree.png":
+                return 7;
+            case "/cloud.png":
+                return 10;
+            default:
+                return 5;
+        }
+    }
 
 
         public void paint(Graphics2D g2d, ImageObserver observer) {
             g2d.drawImage(getImage(), getX(), getY(), observer);
         }
 
-    }*/
+    }

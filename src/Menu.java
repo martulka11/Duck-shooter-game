@@ -1,7 +1,5 @@
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,17 +13,19 @@ public class Menu extends JPanel implements ActionListener {
     public Menu(){
 
         button1 = new JButton("New Game");
-        button1.setPreferredSize( new Dimension(200, 100));
         button2 = new JButton("High Score");
-        button2.setPreferredSize( new Dimension(200, 100));
         button3 = new JButton("Exit");
-        button3.setPreferredSize( new Dimension(200, 100));
 
-        setLayout(new GridBagLayout());
+        this.setLayout(new GridBagLayout());
 
         GridBagConstraints layout = new GridBagConstraints();
+        layout.insets = new Insets(15,0,15,0);
         layout.gridwidth = GridBagConstraints.REMAINDER;
-        add(new JLabel("<html><h1><strong><i>Duck Schooter</i></strong></h1><hr></html>"), layout);
+
+        JLabel label = new JLabel("<html><strong><i>Duck Schooter</i></strong><hr></html>");
+        label.setFont(new Font("Serif", Font.PLAIN, 60));
+        add(label, layout);
+
 
         button1.addActionListener(this);
         button2.addActionListener(this);
@@ -35,9 +35,21 @@ public class Menu extends JPanel implements ActionListener {
        this.add(button2, layout);
        this.add(button3, layout);
 
+        Color colorBtn = new Color(74, 78 ,105);
+        Dimension d = new Dimension(170, 70);
 
-        this.setSize(500, 500);
-        this.setBackground(Color.PINK);
+        button1.setBackground(colorBtn);
+        button2.setBackground(colorBtn);
+        button3.setBackground(colorBtn);
+        button1.setPreferredSize(d);
+        button2.setPreferredSize(d);
+        button3.setPreferredSize(d);
+        button1.setForeground(Color.WHITE);
+        button2.setForeground(Color.WHITE);
+        button3.setForeground(Color.WHITE);
+
+        Color color = new Color(245, 235 ,224);
+        this.setBackground(color);
 
     }
 
@@ -45,9 +57,9 @@ public class Menu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source == button1){
-            MyFrame.cObjl.next(MyFrame.cPanel);
+            MyFrame.cardLayout.next(MyFrame.mainPanel);
         } else if(source == button2){
-            MyFrame.cObjl.show(MyFrame.cPanel, "4");
+            MyFrame.cardLayout.show(MyFrame.mainPanel, "4");
         } else if(source == button3){
             System.exit(0);
         }

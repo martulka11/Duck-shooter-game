@@ -1,5 +1,9 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
@@ -8,103 +12,118 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 public class GameScreen extends JPanel{
 
-    private JLabel labelTime = new JLabel("0");
-    private JLabel labelScore = new JLabel("0");
+    private JLabel labelTime = new JLabel("Time");
+    private JLabel labelScore = new JLabel("Score");
     public static int start = 0;
     public static int score = 0;
+    public static Timer timer;
     public static Timer timer2;
 
-    private List<Duck> ducks;
+
+    public GameScreen() {
+        addKeyListener(new MultiKeyListener());
 
 
-    public GameScreen(List<Duck> ducks) {
-
-        this.ducks = ducks;
-
-        Random rnd = new Random();
-
-
-        for (Duck duck : ducks) {
-          duck.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    Point me = e.getPoint();
-                    // Rectangle bounds = new Rectangle(getSize());
-                    //  if (bounds.contains(me)) {
-                    for(int i = 0; i < ducks.size(); i++){
-                        if(ducks.get(i).getLives()>0){
-                            System.out.println(ducks.get(i).getY());
-                            ducks.get(i).reduceLives();
-                            System.out.println("zostalo zyc" + ducks.get(i).getLives());
-                        } else {
-                            // score++; inaczej??????????????/
-                            //moze liczac kaczki ktore nie maja obrazkow???
-                            ducks.remove(i);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Point me = e.getPoint();
+                Duck remove = null;
+                Obstacle obs = null;
+                    for (Obstacle obstacle : MyFrame.obstacles) {
+                        if (me.getX() >= obstacle.getX() && me.getX() <= obstacle.getX() + obstacle.getWidth() && me.getY() >= obstacle.getY() && me.getY() <= obstacle.getY() + obstacle.getHeight()) {
+                            obs = obstacle;
+                            System.out.println("Obstacle");
                         }
                     }
-                    System.out.println("I was clicked!");
+
+                for(Duck duck : MyFrame.ducks) {
+                    if (me.getX() >= duck.getX() && me.getX() <= duck.getX() + duck.getWidth() && me.getY() >= duck.getY() && me.getY() <= duck.getY() + duck.getHeight()) {
+                        remove = duck;
+                        score++;
+                        System.out.println("Punkty" + score);
+                        System.out.println("Hide duck");
+
+                }}
+
+                if(remove != null){
+                    remove.reduceLives();
+                    System.out.println(remove.getLives());
+                    if(remove.getLives() == 0)
+                        MyFrame.ducks.remove(remove);
                 }
-                // }
-            });
-          // System.out.println(getX());
-            //duck.setDelta(xDelta, 0);
-        };
 
-
-
-
-        Timer timer = new Timer(1, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Rectangle bounds = new Rectangle(getSize());
-                for (Duck duck : ducks) {
-                    duck.move(bounds);
+                if(obs != null){
+                    obs.reduceLives();
+                    System.out.println(obs.getLives());
+                    if(obs.getLives() == 0)
+                        MyFrame.obstacles.remove(obs);
                 }
-                start++;
-             //   System.out.println(start);
-                repaint();
-            }
-        });
-        timer.start();
 
-
-
-        ActionListener al=new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                    //start++
-                if(Player.livesPlayer == 0){
+                if(Player.livesPlayer  < 0){
                     timer.stop();
                 }
 
             }
-
-        };
-        timer2 =new Timer(1000,al);
+        });
 
 
+    timer = new Timer(1, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Rectangle bounds = new Rectangle(getSize());
+            for (Duck duck : MyFrame.ducks) {
+                duck.move(bounds);
+            }
+            for (Obstacle obs : MyFrame.obstacles) {
+                obs.moveObstacle(bounds);
+            }
+            repaint();
+        }
+    });
+    timer.start();
 
-        new Thread(
-                () -> {
-                    while (!Thread.currentThread().isInterrupted()) {
-                        labelTime.setText(String.valueOf(start));
-                        labelScore.setText(String.valueOf(score));
+
+            new Thread(
+                    () -> {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            labelTime.setText("Time  " + String.valueOf(start));
+                            labelScore.setText("Score  " + String.valueOf(score));
+                            if (Player.livesPlayer < 0) {
+                                Thread.currentThread().isInterrupted();
+                                return;
+                            }
+                        }
                     }
-                }
-        ).start();
+            ).start();
+
+
+        labelTime.setFont(new Font("Serif", Font.PLAIN, 20));
+        labelScore.setFont(new Font("Serif", Font.PLAIN, 20));
+
+        Border border = labelTime.getBorder();
+        Border margin = new EmptyBorder(10,100,10,100);
+        labelTime.setBorder(new CompoundBorder(border, margin));
+
+        Border border1 = labelScore.getBorder();
+        Border margin1 = new EmptyBorder(10,100,10,100);
+        labelScore.setBorder(new CompoundBorder(border1, margin1));
+
+        add(labelTime);
+        add(labelScore);
+
 
         this.setBackground(Color.WHITE);
     }
-/*
-        public void startCounter () {
+
+
+        public static void startCounter () {
             new Thread(
                     () -> {
                         try {
@@ -112,28 +131,24 @@ public class GameScreen extends JPanel{
                                 start++;
                                 Thread.sleep(1000);
                                 System.out.println(start);
+                                if (Player.livesPlayer < 0) {
+                                    Thread.currentThread().isInterrupted();
+                                    Player kol = new Player("marta");
+                                    Player.zapisWynikow(kol);
+                                   // MyFrame.cardLayout.show(MyFrame.mainPanel, "1");
+                                    //wywolac mtode zapisywania i zresetowac gre albo ja wylaczyc
+                                    return;
+                                }
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
                     }
+
             ).start();
-
-        }*/
-//jakbym tutaj dodala metode dodajaca kaczki??
-
-
-        public void zapisWynikow (String sciezkapliku){
-            try {
-                FileWriter fileWriter = new FileWriter(sciezkapliku);
-                fileWriter.write(MyFrame.listOfPlayer.toString());
-                fileWriter.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
 
         @Override
         public Dimension getPreferredSize () {
@@ -143,20 +158,35 @@ public class GameScreen extends JPanel{
         @Override
         protected void paintComponent (Graphics g){
             super.paintComponent(g);
-            for (Duck duck : ducks) {
+            for (Duck duck : MyFrame.ducks) {
+               for(Obstacle obstacle : MyFrame.obstacles){
                 Graphics2D g2d = (Graphics2D) g.create();
                 duck.paint(g2d, this);
+                obstacle.paint(g2d,this);
                 g2d.dispose();
+            }
             }
         }
 
-        public void gameOverJDialog () {
+        /*
+    ActionListener al=new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+            //start++
+            if(Player.livesPlayer == 0){
+                timer.stop();
+            }
+
+        }
+
+    };*/
+
+    public static void gameOverJDialog() {
             JDialog dialog = new JDialog(new Frame(), "Info Frame");
             dialog.setLayout(new FlowLayout());
             JLabel lab = new JLabel("Game Over");
             JButton button = new JButton("Back to Menu");
             dialog.add(lab);
-            button.addActionListener(actionListener);
+            //button.addActionListener(actionListener);
             dialog.add(button);
             dialog.setSize(600, 500);
             dialog.setVisible(true);
@@ -165,7 +195,7 @@ public class GameScreen extends JPanel{
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            MyFrame.cObjl.show(MyFrame.cPanel, "1");
+            MyFrame.cardLayout.show(MyFrame.mainPanel, "1");
         }
     };
 

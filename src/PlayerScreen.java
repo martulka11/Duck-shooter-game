@@ -6,48 +6,93 @@ import java.util.List;
 
 public class PlayerScreen extends JPanel implements ActionListener {
 
-    private JButton playButton;
     private JButton easy;
     private JButton medium;
     private JButton hard;
-    private String name;
-    private JTextField textField;
+   // private String name;
+  //  private JTextField textField;
 
 
     public PlayerScreen(){
-        JLabel labelText = new JLabel("Enter your name");
-        textField = new JTextField(20);
-        playButton = new JButton("PLAY");
+
+        // do okna game over
+      //  JLabel labelText = new JLabel("Enter your name");
+      //  textField = new JTextField(20);
         easy = new JButton("EASY");
         medium = new JButton("MEDIUM");
         hard = new JButton("HARD");
 
-        this.add(labelText);
-        this.add(textField);
-        this.add(playButton);
-        this.add(new JLabel("<html><h1><strong>Choose difficulty level</strong></h1><hr></html>"));
-        this.add(easy);
-        this.add(medium);
-        this.add(hard);
+        this.setLayout(new GridBagLayout());
+
+        GridBagConstraints layout = new GridBagConstraints();
+        layout.insets = new Insets(15,0,15,0);
+        layout.gridwidth = GridBagConstraints.REMAINDER;
+
+        //this.add(labelText);
+       // this.add(textField);
+        JLabel label = new JLabel("<html><strong>Choose difficulty level</strong><hr></html>");
+        label.setFont(new Font("Serif", Font.PLAIN, 60));
+        add(label, layout);
+
+        easy.addActionListener(this);
+        medium.addActionListener(this);
+        hard.addActionListener(this);
+
+        this.add(easy, layout);
+        this.add(medium, layout);
+        this.add(hard, layout);
+
+        Color colorBtn = new Color(74, 78 ,105);
+        Dimension d = new Dimension(170, 70);
+
+        easy.setBackground(colorBtn);
+        medium.setBackground(colorBtn);
+        hard.setBackground(colorBtn);
+        easy.setPreferredSize(d);
+        medium.setPreferredSize(d);
+        hard.setPreferredSize(d);
+        easy.setForeground(Color.WHITE);
+        medium.setForeground(Color.WHITE);
+        hard.setForeground(Color.WHITE);
 
 
-        playButton.addActionListener(this);
-
-
-        this.setBackground(Color.WHITE);
-
+        Color color = new Color(245, 235 ,224);
+        this.setBackground(color);
 
     }
-
 
    @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if(source == playButton){
-            MyFrame.cObjl.next(MyFrame.cPanel);
-            GameScreen.timer2.start();
-            name = textField.getText();
-            System.out.println(name);
-}
-    }
+        if(source == easy){
+            MyFrame.cardLayout.show(MyFrame.mainPanel, "3");
+            GameScreen.startCounter();
+            for(Duck duck : MyFrame.ducks) {
+                duck.increaseSpeed(1);
+            }
+            MyFrame.newDuck();
+            MyFrame.speedUp();
+            MyFrame.addLives();
+            // name = textField.getText();
+           // System.out.println(name);
+           // zaimplentowac w okeidnku po gaem over
+        }else if(source == medium){
+            MyFrame.cardLayout.show(MyFrame.mainPanel, "3");
+           GameScreen.startCounter();
+            for(Duck duck : MyFrame.ducks) {
+                duck.increaseSpeed(2);
+            }
+            MyFrame.newDuckLevelUp();
+            MyFrame.speedUp();
+            MyFrame.addLives();
+        }else if(source == hard){
+           MyFrame.cardLayout.show(MyFrame.mainPanel, "3");
+           GameScreen.startCounter();
+           for(Duck duck : MyFrame.ducks) {
+               duck.increaseSpeed(3);
+           }
+            MyFrame.newDuckLevelUp();
+            MyFrame.addLives();
+        }
+    };
 }

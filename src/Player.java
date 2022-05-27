@@ -1,25 +1,37 @@
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
-public class Player {
+public class Player implements Serializable {
 
-    private int score;
+    private transient int score;
     private String name;
-    private int time;
-    public static int livesPlayer = 10;
-    private int totalScore;
+    private transient int time;
+    public  transient static int livesPlayer = 3;
+    private long totalScore;
 
 
-    public Player(String name){
+    public Player(String name ) {
         this.name = name;
-        this.score = GameScreen.score;
-        this.time = GameScreen.start;
-        this.totalScore = score*time;
+        this.score = 20;//GameScreen.score;
+        this.time = 40; //GameScreen.start;
+        this.totalScore = score * time;
         MyFrame.listOfPlayer.add(this);
+        System.out.println(name + totalScore);
+
     }
 
-
+    public static void zapisWynikow (Player player){
+        try {
+            FileOutputStream fileOut =
+                    new FileOutputStream("/document.txt");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(player);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved ");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
 
     @Override
     public String toString() {
@@ -27,3 +39,15 @@ public class Player {
                 "Total Score: " + totalScore + '\n';
     }
 }
+/*
+                try {
+            FileWriter fileWriter = new FileWriter(sciezkapliku);
+            fileWriter.write(MyFrame.listOfPlayer.toString());
+            fileWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+

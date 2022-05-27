@@ -11,31 +11,21 @@ import javax.swing.*;
 public class Duck extends JLabel implements ImageObserver {
     private BufferedImage image;
     private String pathname;
-    private int distance;
-    private int speed;
+    public int distance;
     private int x;
     private int y;
-    private int width;
-    private int hight;
-    public int lives;
-    private int score;
-
-
+    private int lives;
 
     public Duck(String pathname, int y) {
         super();
-        //this.image = dimg;
         this.pathname = pathname;
-       //this.speed = speed;
-        this.distance =  1 + (int)(Math.random()*5);
+        this.distance =  1 + (int)(Math.random());
         this.x = 0;
         this.y = y;
-        //this.width = width;
-        //this.hight = hight;
         this.lives = duckColor();
         System.out.println("make duck"+ lives);
-        this.score = 0;
-
+        //mozemy tez zronic tak ze uttja dodam tablice static i co jakis czas bede
+        //tworzyc kaczke i dodawac ja do litsy ktora listy kotra jest caly czas renderowana
 
 
 
@@ -49,25 +39,37 @@ public class Duck extends JLabel implements ImageObserver {
 
     }
 
-   /* Image dimg = image.getScaledInstance(width, hight,
-            Image.SCALE_SMOOTH);
-*/
-  //  ImageIcon imageIcon = new ImageIcon(dimg);
 
     public int duckColor() {
         switch (pathname) {
             case "/red-duck.png":
                 return 3;
             case "/blue-duck.png":
-                return 6;
+                return 5;
             case "/green-duck.png":
-                return 8;
+                return 7;
             case "/yellow-duck.png":
                 return 10;
             default:
-                return 0;
+                return 5;
         }
     }
+
+    public void increaseSpeed(int number){
+        this.distance *= number ;
+    }
+
+    public void increaseSpeed(){
+
+        this.distance += 100 ;
+    }
+
+    public void increaseLives(){
+
+        this.lives += 2 ;
+    }
+
+
 
     public int getLives() {
         return lives;
@@ -75,10 +77,6 @@ public class Duck extends JLabel implements ImageObserver {
 
     public BufferedImage getImage() {
         return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
     }
 
     public void reduceLives() {
@@ -117,19 +115,16 @@ public class Duck extends JLabel implements ImageObserver {
         return image == null ? 0 : image.getHeight();
     }
 
-
-    public int addScore(){
-        return GameScreen.score + this.score;
-}
-
     public void move(Rectangle bounds){
         x+= distance;
             if(x + getWidth() > bounds.width){
+                System.out.println(Player.livesPlayer);
                 Player.livesPlayer--;
              x = bounds.width - getWidth();
              distance *=-1;
          } else if(x < 0){
                 Player.livesPlayer--;
+                System.out.println(Player.livesPlayer);
                 x = 0;
              distance *= -1;
         }
@@ -138,16 +133,9 @@ public class Duck extends JLabel implements ImageObserver {
     }
 
 
-public void paint(Graphics2D g2d, ImageObserver observer) {
+    public void paint(Graphics2D g2d, ImageObserver observer) {
     g2d.drawImage(getImage(), getX(), getY(), observer);
 }
-
-ActionListener ad = new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("Cick");
-    }
-};
 
 
 }

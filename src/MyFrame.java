@@ -1,11 +1,9 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.Container;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
 import java.util.List;
 
 
@@ -16,18 +14,20 @@ public class MyFrame extends JFrame{
     public static JPanel gameScreen;
     public static JPanel scoreScreen;
 
+    public static List<Duck> ducks;
+    public static List<Obstacle> obstacles;
 
     public static List<Player> listOfPlayer = new LinkedList<>();
 
-    public static CardLayout cObjl;
-    public static JPanel cPanel;
+    public static CardLayout cardLayout;
+    public static JPanel mainPanel;
 
     public MyFrame() {
        super("Duck shooter");
-        cPanel = new JPanel();
-        cObjl = new CardLayout();
+        mainPanel = new JPanel();
+        cardLayout = new CardLayout();
 
-        cPanel.setLayout(cObjl);
+        mainPanel.setLayout(cardLayout);
 
 
         menuScreen = new JPanel();
@@ -38,41 +38,41 @@ public class MyFrame extends JFrame{
 
         Menu menu = new Menu();
         menuScreen.add(menu);
-       menuScreen.setBackground(Color.PINK);
+        Color color = new Color(245, 235 ,224);
+        menuScreen.setBackground(color);
 
+
+        ducks = new ArrayList<>();
+        ducks.add(new Duck("/red-duck.png", 100));
+        ducks.add(new Duck("/blue-duck.png", 200));
+        ducks.add(new Duck("/yellow-duck.png", 600));
+
+        obstacles = new ArrayList<>();
+        obstacles.add(new Obstacle("/cloud.png", 100));
+        obstacles.add(new Obstacle("/tree.png", 500));
+
+
+        GameScreen game = new GameScreen();
+        gameScreen.add(game);
+        gameScreen.setBackground(Color.PINK);
 
         PlayerScreen playerS = new PlayerScreen();
         playerScreen.add(playerS);
-
-
-        List<Duck> ducks = new ArrayList<>();
-        List<Duck> ducksMedium = new ArrayList<>();
-        List<Duck> ducksHard = new ArrayList<>();
-        Duck ducks1 = new Duck("/red-duck.png", 100);
-        ducks.add(new Duck("/green-duck.png", 200));
-        ducks.add(ducks1);
-
-        GameScreen game = new GameScreen(ducks);
-        gameScreen.add(game);
-        gameScreen.setBackground(Color.WHITE);
+        playerScreen.setBackground(color);
 
         ScoreTable scoreTable = new ScoreTable();
         scoreScreen.add(scoreTable);
-
-        scoreScreen.setLayout(new BorderLayout());
-
-
-        cPanel.add(menuScreen, "1");
-
-        cPanel.add(playerScreen, "2");
-
-        cPanel.add(gameScreen, "3");
-
-        cPanel.add(scoreScreen, "4");
-
-        getContentPane().add(cPanel);
+        scoreScreen.setBackground(color);
 
 
+        mainPanel.add(menuScreen, "1");
+        mainPanel.add(playerScreen, "2");
+        mainPanel.add(gameScreen, "3");
+        mainPanel.add(scoreScreen, "4");
+
+        getContentPane().add(mainPanel);
+
+        addKeyListener(new MultiKeyListener());
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
@@ -81,11 +81,138 @@ public class MyFrame extends JFrame{
     }
 
 
+    public static String generatorColorsDuck(){
+        Random generator = new Random();
+        int number = generator.nextInt(5);
+        switch (number) {
+            case 1:
+                return "/red-duck.png";
+            case 2:
+                return "/blue-duck.png";
+            case 3:
+                return "/green-duck.png";
+            case 4:
+                return "/yellow-duck.png";
+            default:
+                return "/red-duck.png";
+        }
+    }
+
+
+    public static String generatorObstacle(){
+        Random generator = new Random();
+        int number = generator.nextInt(3);
+        switch (number) {
+            case 1:
+                return "/cloud.png";
+            case 2:
+                return "/tree.png";
+            default:
+                return "/cloud.png";
+        }
+    }
+
+    public static int generatorY(){
+        Random generator = new Random();
+        int number = generator.nextInt(800);
+        return number;
+    }
+
+
+    public static void speedUp () {
+        new Thread(
+                () -> {
+                    try {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            Thread.sleep(5000);
+                            for(Duck duck : ducks){
+                                duck.increaseSpeed(2);
+                            }
+                            if (Player.livesPlayer < 0) {
+                                Thread.currentThread().isInterrupted();
+                                return;
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
+
+
+    public static void addLives () {
+        new Thread(
+                () -> {
+                    try {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            Thread.sleep(5000);
+                            for(Duck duck : ducks){
+                                duck.increaseLives();
+                            }
+                            if (Player.livesPlayer < 0) {
+                                Thread.currentThread().isInterrupted();
+                                return;
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
+
+
+
+    public static void newDuck () {
+        new Thread(
+                () -> {
+                    try {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            ducks.add(new Duck(generatorColorsDuck(), generatorY()));
+                            obstacles.add(new Obstacle(generatorObstacle(), generatorY()));
+                            Thread.sleep(5000);
+                            if (Player.livesPlayer < 0) {
+                                Thread.currentThread().isInterrupted();
+                                return;
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
+
+
+    public static void newDuckLevelUp () {
+        new Thread(
+                () -> {
+                    try {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            ducks.add(new Duck(generatorColorsDuck(), generatorY()));
+                            ducks.add(new Duck(generatorColorsDuck(), generatorY()));
+                            obstacles.add(new Obstacle(generatorObstacle(), generatorY()));
+                            Thread.sleep(5000);
+                            if (Player.livesPlayer < 0) {
+                                Thread.currentThread().isInterrupted();
+                                return;
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+
+    }
+
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MyFrame();
+                    new MyFrame();
 
             }
         });
