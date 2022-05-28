@@ -11,20 +11,22 @@ public class Player implements Serializable {
 
     public Player(String name ) {
         this.name = name;
-        this.score = 20;//GameScreen.score;
-        this.time = 40; //GameScreen.start;
+        this.score = GameScreen.score;
+        this.time = GameScreen.start;
         this.totalScore = score * time;
         MyFrame.listOfPlayer.add(this);
         System.out.println(name + totalScore);
 
+        savePlayer("D:\\kaczki.txt");
     }
 
-    public static void zapisWynikow (Player player){
+    public static void savePlayer (String sciezkapliku){
         try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("/document.txt");
+            FileOutputStream fileOut = new FileOutputStream(sciezkapliku);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(player);
+            for(int i = 0 ; i < MyFrame.listOfPlayer.size() ; i++) {
+            out.writeObject(MyFrame.listOfPlayer.get(i).toString());
+            }
             out.close();
             fileOut.close();
             System.out.printf("Serialized data is saved ");
@@ -40,7 +42,8 @@ public class Player implements Serializable {
     }
 }
 /*
-                try {
+
+ try {
             FileWriter fileWriter = new FileWriter(sciezkapliku);
             fileWriter.write(MyFrame.listOfPlayer.toString());
             fileWriter.close();
@@ -48,6 +51,18 @@ public class Player implements Serializable {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+         try {
+            FileOutputStream fileOut =
+                    new FileOutputStream("/document.txt");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(player);
+            out.close();
+            fileOut.close();
+            System.out.printf("Serialized data is saved ");
+        } catch (IOException i) {
+            i.printStackTrace();
         }
     }*/
 

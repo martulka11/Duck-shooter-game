@@ -3,21 +3,23 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
 
-public class MyFrame extends JFrame{
+public class MyFrame extends JFrame implements Serializable {
 
     private JPanel menuScreen;
     public static JPanel playerScreen;
     public static JPanel gameScreen;
     public static JPanel scoreScreen;
+    public static JPanel gameOverScreen;
 
     public static List<Duck> ducks;
     public static List<Obstacle> obstacles;
 
-    public static List<Player> listOfPlayer = new LinkedList<>();
+    public static List<Player> listOfPlayer = new ArrayList<>();
 
     public static CardLayout cardLayout;
     public static JPanel mainPanel;
@@ -34,6 +36,7 @@ public class MyFrame extends JFrame{
         playerScreen = new JPanel();
         gameScreen = new JPanel();
         scoreScreen = new JPanel();
+        gameOverScreen = new JPanel();
 
 
         Menu menu = new Menu();
@@ -65,10 +68,15 @@ public class MyFrame extends JFrame{
         scoreScreen.setBackground(color);
 
 
+        GameOver gameOver = new GameOver();
+        gameOverScreen.add(gameOver);
+        gameOverScreen.setBackground(color);
+
         mainPanel.add(menuScreen, "1");
         mainPanel.add(playerScreen, "2");
         mainPanel.add(gameScreen, "3");
         mainPanel.add(scoreScreen, "4");
+        mainPanel.add(gameOverScreen, "5");
 
         getContentPane().add(mainPanel);
 

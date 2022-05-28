@@ -133,8 +133,9 @@ public class GameScreen extends JPanel{
                                 System.out.println(start);
                                 if (Player.livesPlayer < 0) {
                                     Thread.currentThread().isInterrupted();
-                                    Player kol = new Player("marta");
-                                    Player.zapisWynikow(kol);
+                                  //  Player kol = new Player("marta");
+                                    MyFrame.cardLayout.show(MyFrame.mainPanel, "5");
+                                   // Player.zapisWynikow(kol, "D:\\kaczki");
                                    // MyFrame.cardLayout.show(MyFrame.mainPanel, "1");
                                     //wywolac mtode zapisywania i zresetowac gre albo ja wylaczyc
                                     return;
@@ -167,18 +168,6 @@ public class GameScreen extends JPanel{
             }
             }
         }
-
-        /*
-    ActionListener al=new ActionListener() {
-        public void actionPerformed(ActionEvent ae) {
-            //start++
-            if(Player.livesPlayer == 0){
-                timer.stop();
-            }
-
-        }
-
-    };*/
 
     public static void gameOverJDialog() {
             JDialog dialog = new JDialog(new Frame(), "Info Frame");
