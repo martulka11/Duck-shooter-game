@@ -27,7 +27,7 @@ public class GameScreen extends JPanel{
 
 
     public GameScreen() {
-        addKeyListener(new MultiKeyListener());
+       // addKeyListener(new MultiKeyListener());
 
 
         addMouseListener(new MouseAdapter() {
@@ -133,11 +133,7 @@ public class GameScreen extends JPanel{
                                 System.out.println(start);
                                 if (Player.livesPlayer < 0) {
                                     Thread.currentThread().isInterrupted();
-                                  //  Player kol = new Player("marta");
                                     MyFrame.cardLayout.show(MyFrame.mainPanel, "5");
-                                   // Player.zapisWynikow(kol, "D:\\kaczki");
-                                   // MyFrame.cardLayout.show(MyFrame.mainPanel, "1");
-                                    //wywolac mtode zapisywania i zresetowac gre albo ja wylaczyc
                                     return;
                                 }
                             }
@@ -168,25 +164,6 @@ public class GameScreen extends JPanel{
             }
             }
         }
-
-    public static void gameOverJDialog() {
-            JDialog dialog = new JDialog(new Frame(), "Info Frame");
-            dialog.setLayout(new FlowLayout());
-            JLabel lab = new JLabel("Game Over");
-            JButton button = new JButton("Back to Menu");
-            dialog.add(lab);
-            //button.addActionListener(actionListener);
-            dialog.add(button);
-            dialog.setSize(600, 500);
-            dialog.setVisible(true);
-        }
-
-    ActionListener actionListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            MyFrame.cardLayout.show(MyFrame.mainPanel, "1");
-        }
-    };
 
 
 

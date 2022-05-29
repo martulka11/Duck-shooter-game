@@ -1,20 +1,21 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Menu extends JPanel implements ActionListener {
+public class Menu extends JPanel implements ActionListener{
     private JButton button1;
     private JButton button2;
     private JButton button3;
-
 
     public Menu(){
 
         button1 = new JButton("New Game");
         button2 = new JButton("High Score");
         button3 = new JButton("Exit");
+
 
         this.setLayout(new GridBagLayout());
 
@@ -48,10 +49,12 @@ public class Menu extends JPanel implements ActionListener {
         button2.setForeground(Color.WHITE);
         button3.setForeground(Color.WHITE);
 
+
         Color color = new Color(245, 235 ,224);
         this.setBackground(color);
 
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

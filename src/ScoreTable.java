@@ -13,9 +13,8 @@ public class ScoreTable extends JPanel implements Serializable, ActionListener {
     private JList list;
     private JButton back;
 
-public ScoreTable(){
 
-    Object[] data = { "Value 1", "Value 2", "Value 3", "Value 4", "Value 5" };
+public ScoreTable(){
 
     this.setLayout(new GridBagLayout());
 
@@ -48,10 +47,11 @@ public ScoreTable(){
     this.add(scrollPane, layout);
     this.add(back, layout);
 
-   //odczytWynikow("D:\\kaczki.txt");
+    //readResult("D:\\kaczki.txt");
 
-    for (int i = 0; i < 50; i++) {
-        ((DefaultListModel) list.getModel()).addElement(String.valueOf(i));
+   for (int i = 0; i < 50; i++) {
+       ((DefaultListModel) list.getModel()).addElement(i);
+
     }
 
 
@@ -59,13 +59,15 @@ public ScoreTable(){
     this.setBackground(color);
     this.setSize(1200, 900);
 
+
+
 }
 
 
-    public ArrayList<Player> odczytWynikow (String sciezkapliku){
-        MyFrame.listOfPlayer = null;
+    public ArrayList<Player> readResult (String pathname){
+      MyFrame.listOfPlayer = null;
         try {
-            FileInputStream fileIn = new FileInputStream(sciezkapliku);
+            FileInputStream fileIn = new FileInputStream(pathname);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             MyFrame.listOfPlayer = (ArrayList) in.readObject();
 
@@ -73,11 +75,9 @@ public ScoreTable(){
             fileIn.close();
         } catch (IOException i) {
             i.printStackTrace();
-            //return (ArrayList<Player>) MyFrame.listOfPlayer;
         } catch (ClassNotFoundException c) {
             System.out.println("Employee class not found");
             c.printStackTrace();
-           // return (ArrayList<Player>) MyFrame.listOfPlayer;
     }
         return (ArrayList<Player>) MyFrame.listOfPlayer;
 }
@@ -93,29 +93,6 @@ public ScoreTable(){
 
         }
     }
-
-    /*
-    *
-    public static void odczytWynikow (String sciezkapliku){
-    MyFrame. = null;
-    try {
-        FileInputStream fileIn = new FileInputStream(sciezkapliku);
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-       // for(Player player : MyFrame.listOfPlayer){
-        MyFrame.listOfPlayer = (Player) in.readObject();
-
-        in.close();
-        fileIn.close();
-    } catch (IOException i) {
-        i.printStackTrace();
-        return;
-    } catch (ClassNotFoundException c) {
-        System.out.println("Employee class not found");
-        c.printStackTrace();
-        return;
-    }
-}
-*/
 
 
 

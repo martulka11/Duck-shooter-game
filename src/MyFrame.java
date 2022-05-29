@@ -3,6 +3,8 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.*;
 import java.util.List;
@@ -80,7 +82,14 @@ public class MyFrame extends JFrame implements Serializable {
 
         getContentPane().add(mainPanel);
 
-        addKeyListener(new MultiKeyListener());
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventDispatcher(e -> {
+                    if(e.getKeyCode() == e.VK_Q && e.isControlDown() && e.isShiftDown()){
+                    System.out.println("Exit game");
+                    System.exit(0);
+                    }
+                    return false;
+                });
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
