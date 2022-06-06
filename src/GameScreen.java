@@ -6,14 +6,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
 
 
 public class GameScreen extends JPanel{
@@ -27,7 +19,6 @@ public class GameScreen extends JPanel{
 
 
     public GameScreen() {
-       // addKeyListener(new MultiKeyListener());
 
 
         addMouseListener(new MouseAdapter() {
@@ -130,7 +121,6 @@ public class GameScreen extends JPanel{
                             while (!Thread.currentThread().isInterrupted()) {
                                 start++;
                                 Thread.sleep(1000);
-                                System.out.println(start);
                                 if (Player.livesPlayer < 0) {
                                     Thread.currentThread().isInterrupted();
                                     MyFrame.cardLayout.show(MyFrame.mainPanel, "5");

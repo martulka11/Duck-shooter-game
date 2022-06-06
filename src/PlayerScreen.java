@@ -2,22 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class PlayerScreen extends JPanel implements ActionListener {
 
     private JButton easy;
     private JButton medium;
     private JButton hard;
-   // private String name;
-  //  private JTextField textField;
-
 
     public PlayerScreen(){
 
-        // do okna game over
-      //  JLabel labelText = new JLabel("Enter your name");
-      //  textField = new JTextField(20);
         easy = new JButton("EASY");
         medium = new JButton("MEDIUM");
         hard = new JButton("HARD");
@@ -28,8 +21,7 @@ public class PlayerScreen extends JPanel implements ActionListener {
         layout.insets = new Insets(15,0,15,0);
         layout.gridwidth = GridBagConstraints.REMAINDER;
 
-        //this.add(labelText);
-       // this.add(textField);
+
         JLabel label = new JLabel("<html><strong>Choose difficulty level</strong><hr></html>");
         label.setFont(new Font("Serif", Font.PLAIN, 60));
         add(label, layout);
@@ -73,9 +65,6 @@ public class PlayerScreen extends JPanel implements ActionListener {
             MyFrame.newDuck();
             MyFrame.speedUp();
             MyFrame.addLives();
-            // name = textField.getText();
-           // System.out.println(name);
-           // zaimplentowac w okeidnku po gaem over
         }else if(source == medium){
             MyFrame.cardLayout.show(MyFrame.mainPanel, "3");
            GameScreen.startCounter();

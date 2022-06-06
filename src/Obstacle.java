@@ -1,11 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.File;
 import java.io.IOException;
 
 public class Obstacle extends JLabel implements ImageObserver {
@@ -23,7 +20,6 @@ public class Obstacle extends JLabel implements ImageObserver {
         this.x = 0;
         this.y = y;
         this.lives = obstacleLives();
-        System.out.println("make obstacle"+ lives);
 
 
         String imageFile = pathname;

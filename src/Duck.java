@@ -1,8 +1,6 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,10 +21,6 @@ public class Duck extends JLabel implements ImageObserver {
         this.x = 0;
         this.y = y;
         this.lives = duckColor();
-        System.out.println("make duck"+ lives);
-        //mozemy tez zronic tak ze uttja dodam tablice static i co jakis czas bede
-        //tworzyc kaczke i dodawac ja do litsy ktora listy kotra jest caly czas renderowana
-
 
 
         String imageFile = pathname;

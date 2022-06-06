@@ -1,10 +1,5 @@
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.*;
 import java.util.List;
@@ -90,6 +85,13 @@ public class MyFrame extends JFrame implements Serializable {
                     }
                     return false;
                 });
+
+        ScoreTable.readResult("/document.txt");
+        for(Player play : MyFrame.listOfPlayer){
+            System.out.println(play);
+        };
+
+        ScoreTable.showPlayers();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();

@@ -2,8 +2,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Menu extends JPanel implements ActionListener{
     private JButton button1;
@@ -11,11 +9,9 @@ public class Menu extends JPanel implements ActionListener{
     private JButton button3;
 
     public Menu(){
-
         button1 = new JButton("New Game");
         button2 = new JButton("High Score");
         button3 = new JButton("Exit");
-
 
         this.setLayout(new GridBagLayout());
 
@@ -26,7 +22,6 @@ public class Menu extends JPanel implements ActionListener{
         JLabel label = new JLabel("<html><strong><i>Duck Schooter</i></strong><hr></html>");
         label.setFont(new Font("Serif", Font.PLAIN, 60));
         add(label, layout);
-
 
         button1.addActionListener(this);
         button2.addActionListener(this);
